@@ -8,7 +8,7 @@ public class CalcWindow extends JFrame {
     static double result = 0;
     static int index = 0;
     public CalcWindow() {
-        setBounds(800, 600, 800, 637);
+        setBounds(800, 600, 800, 800);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Калькулятор - 2020");
         Font font = new Font("Arial", NORMAL, 20);
@@ -25,8 +25,10 @@ public class CalcWindow extends JFrame {
         JButton buttonPercent = new JButton("%");
         buttonPercent.setBounds(0,500, 200,100);
         add(buttonPercent);
-        JButton buttonC = new JButton("Clear");
-
+        JButton buttonC = new JButton("Очистить поле");
+        buttonC.setBounds(0,600, 800,100);
+        add(buttonC);
+        buttonC.setFont(font);
         JButton buttonSquare = new JButton("x^2");
         buttonSquare.setBounds(200,500, 200,100);
         add(buttonSquare);
@@ -66,6 +68,12 @@ public class CalcWindow extends JFrame {
         JButton [] mathFunc = new JButton[] {buttonDivision, buttonMultiply, buttonPlus, buttonMinus, buttonPercent, buttonSQRT,
                                 buttonSquare};
 
+        buttonC.addActionListener(e -> {
+            textArea.setText("");
+            result = 0;
+        });
+
+
 
         int x = 0;
         int y = 100;
@@ -100,6 +108,7 @@ public class CalcWindow extends JFrame {
         });
 
         buttonCalculation.addActionListener(e -> {
+            if (textArea.getText().equals("")) result = 0;
             String s = textArea.getText();
             index = 0;
             for (int i = 0; i < s.length(); i++) {
@@ -109,7 +118,7 @@ public class CalcWindow extends JFrame {
                 }
             }
             result = calculation(s);
-            double number;
+            double number = 0;
             while (index < s.length()){
                 String calc = "";
                 for (int i = index; i < s.length(); i++) {
@@ -121,6 +130,7 @@ public class CalcWindow extends JFrame {
                     }
                     index = i;
                 }
+
                 number = calculation(s);
                 if (calc.equals("*")) {result *= number;}
                 else if (calc.equals("+")) {result += number;}
@@ -137,12 +147,27 @@ public class CalcWindow extends JFrame {
         });
 
         buttonSQRT.addActionListener(e -> {
-
+            if (textArea.getText().equals("")) result = 0;
+            if (result == 0) {
+                try {
+                    result = Double.parseDouble(textArea.getText());
+                } catch (Exception ex) {
+                    result = 0;
+                }
+            }
             result = Math.sqrt(result);
             textArea.setText("" + result);
         });
 
         buttonSquare.addActionListener(e -> {
+            if (textArea.getText().equals("")) result = 0;
+            if (result == 0) {
+                try {
+                    result = Double.parseDouble(textArea.getText());
+                } catch (Exception ex) {
+                    result = 0;
+                }
+            }
             result = result*result;
             textArea.setText("" + result);
         });
