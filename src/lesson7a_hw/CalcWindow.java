@@ -74,6 +74,12 @@ public class CalcWindow extends JFrame {
         });
 
 
+        buttonC.addActionListener(e -> {
+            textArea.setText("");
+            result = 0;
+        });
+
+
 
         int x = 0;
         int y = 100;
