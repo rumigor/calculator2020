@@ -8,7 +8,7 @@ public class CalcWindow extends JFrame {
     static double result = 0;
     static int index = 0;
     public CalcWindow() {
-        setBounds(800, 600, 800, 637);
+        setBounds(800, 600, 800, 800);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Калькулятор - 2020");
         Font font = new Font("Arial", NORMAL, 20);
@@ -25,8 +25,10 @@ public class CalcWindow extends JFrame {
         JButton buttonPercent = new JButton("%");
         buttonPercent.setBounds(0,500, 200,100);
         add(buttonPercent);
-        JButton buttonC = new JButton("Clear");
-
+        JButton buttonC = new JButton("Очистить поле");
+        buttonC.setBounds(0,600, 800,100);
+        add(buttonC);
+        buttonC.setFont(font);
         JButton buttonSquare = new JButton("x^2");
         buttonSquare.setBounds(200,500, 200,100);
         add(buttonSquare);
@@ -64,7 +66,13 @@ public class CalcWindow extends JFrame {
         add(buttonCalculation);
         JButton [] numbers = new JButton[] {button1, button2, button3, button4, button5, button6, button7, button8, button9, button0, buttonComma};
         JButton [] mathFunc = new JButton[] {buttonDivision, buttonMultiply, buttonPlus, buttonMinus, buttonPercent, buttonSQRT,
-                                buttonSquare};
+                buttonSquare};
+
+        buttonC.addActionListener(e -> {
+            textArea.setText("");
+            result = 0;
+        });
+
 
 
         int x = 0;
@@ -82,7 +90,7 @@ public class CalcWindow extends JFrame {
             x += 200;
             int finalI = i;
             numbers[i].addActionListener(e -> {
-                   textArea.append(numbers[finalI].getText());
+                textArea.append(numbers[finalI].getText());
             });
         }
 
@@ -100,6 +108,7 @@ public class CalcWindow extends JFrame {
         });
 
         buttonCalculation.addActionListener(e -> {
+            if (textArea.getText().equals("")) result = 0;
             String s = textArea.getText();
             index = 0;
             for (int i = 0; i < s.length(); i++) {
@@ -109,7 +118,7 @@ public class CalcWindow extends JFrame {
                 }
             }
             result = calculation(s);
-            double number;
+            double number = 0;
             while (index < s.length()){
                 String calc = "";
                 for (int i = index; i < s.length(); i++) {
@@ -121,28 +130,44 @@ public class CalcWindow extends JFrame {
                     }
                     index = i;
                 }
+
                 number = calculation(s);
                 if (calc.equals("*")) {result *= number;}
                 else if (calc.equals("+")) {result += number;}
                 else if (calc.equals("-")) {result -= number;}
                 else if (calc.equals("/")) {
-                     if (number != 0) {result /= number;}
-                        else {
-                            textArea.setText("Деление на ноль невозможно!");
-                            break;
-                        }
+                    if (number != 0) {result /= number;}
+                    else {
+                        textArea.setText("Деление на ноль невозможно!");
+                        break;
+                    }
                 }
             }
             if (!textArea.getText().equals("Деление на ноль невозможно!")) {textArea.append(" = " + result);}
         });
 
         buttonSQRT.addActionListener(e -> {
-
+            if (textArea.getText().equals("")) result = 0;
+            if (result == 0) {
+                try {
+                    result = Double.parseDouble(textArea.getText());
+                } catch (Exception ex) {
+                    result = 0;
+                }
+            }
             result = Math.sqrt(result);
             textArea.setText("" + result);
         });
 
         buttonSquare.addActionListener(e -> {
+            if (textArea.getText().equals("")) result = 0;
+            if (result == 0) {
+                try {
+                    result = Double.parseDouble(textArea.getText());
+                } catch (Exception ex) {
+                    result = 0;
+                }
+            }
             result = result*result;
             textArea.setText("" + result);
         });
